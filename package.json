@@ -1,17 +1,44 @@
 {
   "name": "the-lovely-language",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1-alpha.0",
+  "description": "An experimental homegrown coding language.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crutchcorn/the-lovely-language.git"
+  },
+  "bugs": {
+    "url": "https://github.com/crutchcorn/the-lovely-language/issues"
+  },
+  "homepage": "https://crutchcorn.github.io/the-lovely-language/",
   "main": "index.js",
   "scripts": {
     "dev": "tsx ./index.ts",
     "debug": "node --inspect-brk --loader tsx ./index.ts",
     "watch": "tsx watch ./index.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
+    "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "vitest": "^0.33.0"
+    "vitest": "^0.33.0",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.0",
+    "lint-staged": "^13.2.3"
+  },
+  "lint-staged": {
+    "*{.js,.jsx,.ts,.tsx}": "eslint --fix"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">= 99999.0.0",
+    "pnpm": ">= 8.0.0"
   }
 }

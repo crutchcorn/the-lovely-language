@@ -1,4 +1,4 @@
-import {Token} from "./lexer";
+import { Token } from "./lexer";
 
 export interface InferStatement<T = unknown> {
   type: "InferStatement";
@@ -41,24 +41,25 @@ const matchers = {
         node: {
           type: "InferStatement",
           identifier: identifier.val,
-          value: value.val
-        }, changeIndexBy: 4
+          value: value.val,
+        },
+        changeIndexBy: 4,
       } as const;
-    }
-  }
-}
+    },
+  },
+};
 
 export function parse(tokens: Token[]): AST {
   const ast = {
     type: "Program",
-    body: [] as ASTNode[]
+    body: [] as ASTNode[],
   } satisfies AST;
 
-  for (let i = 0; i < tokens.length;) {
+  for (let i = 0; i < tokens.length; ) {
     const token = tokens[i];
-    for (let matcher of Object.values(matchers)) {
+    for (const matcher of Object.values(matchers)) {
       if (matcher.identify(tokens, i)) {
-        const {node, changeIndexBy} = matcher.parse(tokens, i);
+        const { node, changeIndexBy } = matcher.parse(tokens, i);
         ast.body.push(node);
         i += changeIndexBy;
         continue;

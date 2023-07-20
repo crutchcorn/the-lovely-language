@@ -1,6 +1,6 @@
-import {expect, test} from "vitest";
-import {tokenize} from "./lexer";
-import {parse} from "./parser";
+import { expect, test } from "vitest";
+import { tokenize } from "./lexer";
+import { parse } from "./parser";
 
 test("lexer should tokenize a basic infer assignment", () => {
   const source = `

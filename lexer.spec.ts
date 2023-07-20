@@ -1,5 +1,5 @@
-import {expect, test} from "vitest";
-import {tokenize} from "./lexer";
+import { expect, test } from "vitest";
+import { tokenize } from "./lexer";
 
 test("lexer should tokenize a basic infer assignment", () => {
   const source = `
