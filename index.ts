@@ -3,13 +3,16 @@ infer Test = 0;
 `;
 
 const defaultKeyword = {
-  match: /\w+/,
+  match: /\S+/,
   type: "Identifier"
 } as const;
 
 const breakKeywords = [{
-  match: /\W/,
+  match: /\s/,
   type: "Whitespace"
+}, {
+  match: /;/,
+  type: "Semicolon"
 }] as const;
 
 const keywords = [{
@@ -17,7 +20,7 @@ const keywords = [{
   type: "InferKeyword"
 }, {
   match: /=/,
-  type: "EqualSign"
+  type: "Equalsign"
 }] as const;
 
 interface Token {
