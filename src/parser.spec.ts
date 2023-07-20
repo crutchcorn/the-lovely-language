@@ -15,9 +15,15 @@ test("lexer should tokenize a basic infer assignment", () => {
     {
       "body": [
         {
-          "identifier": "Test",
+          "identifier": {
+            "type": "Identifier",
+            "val": "Test",
+          },
           "type": "InferStatement",
-          "value": "0",
+          "value": {
+            "type": "Number",
+            "val": "0",
+          },
         },
       ],
       "type": "Program",
