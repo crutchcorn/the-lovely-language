@@ -1,0 +1,15 @@
+{
+  "name": "the-lovely-language",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx ./index.ts",
+    "debug": "node --inspect-brk --loader tsx ./index.ts",
+    "watch": "tsx watch ./index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "tsx": "^3.12.7"
+  }
+}
