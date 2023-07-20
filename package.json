@@ -12,6 +12,7 @@
   "homepage": "https://crutchcorn.github.io/the-lovely-language/",
   "main": "index.js",
   "scripts": {
+    "build": "tsc --noEmit",
     "dev": "tsx ./src/index.ts",
     "debug": "node --inspect-brk --loader tsx ./src/index.ts",
     "watch": "tsx watch ./src/index.ts",
