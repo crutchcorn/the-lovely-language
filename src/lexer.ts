@@ -21,7 +21,15 @@ const keywords = [
   },
   {
     match: /=/,
-    type: "Equalsign",
+    type: "EqualSign",
+  },
+  {
+    match: /\+/,
+    type: "PlusSign",
+  },
+  {
+    match: /-/,
+    type: "MinusSign",
   },
   {
     match: /-?\d+/,

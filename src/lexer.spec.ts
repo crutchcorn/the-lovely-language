@@ -19,7 +19,7 @@ test("lexer should tokenize a basic infer assignment", () => {
         "val": "Test",
       },
       {
-        "type": "Equalsign",
+        "type": "EqualSign",
         "val": "=",
       },
       {

@@ -2,7 +2,7 @@ import { tokenize } from "./lexer";
 import { parse } from "./parser";
 
 const source = `
-infer Test = 0;
+infer Test = 0 + 1 + 2;
 `;
 
 const tokens = tokenize(source);

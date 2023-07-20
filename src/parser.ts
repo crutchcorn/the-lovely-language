@@ -1,12 +1,66 @@
 import { Token } from "./lexer";
 
+function getOperandType(
+  statementName: "AddStatement" | "SubtractStatement",
+  operandOperator: Token["type"],
+) {
+  return {
+    identify: (tokens: Token[], idx: number) => {
+      const left = tokens[idx];
+      const operator = tokens[idx + 1];
+      const right = tokens[idx + 2];
+      const allowedLeftTypes = ["Number", "String"];
+      const allowedOperators = [operandOperator];
+      const allowedRightTypes = ["Number", "String"];
+      if (
+        operator &&
+        right &&
+        allowedLeftTypes.includes(left.type) &&
+        allowedOperators.includes(operator.type) &&
+        allowedRightTypes.includes(right.type)
+      ) {
+        return true;
+      }
+      return false;
+    },
+    parse: (tokens: Token[], idx: number) => {
+      const left = tokens[idx];
+      const _operator = tokens[idx + 1];
+      const right = tokens[idx + 2];
+
+      const isNextANode = innerParse(tokens, idx + 2);
+
+      return {
+        node: {
+          type: statementName,
+          left: left,
+          right: isNextANode?.node ?? right,
+        },
+        changeIndexBy: 2 + (isNextANode ? isNextANode.changeIndexBy : 0),
+      } as const;
+    },
+  };
+}
+
 export interface InferStatement<T = unknown> {
   type: "InferStatement";
-  identifier: string;
+  identifier: Token;
   value: T;
 }
 
-type ASTNode = InferStatement;
+export interface AddStatement<LeftType = unknown, RightType = unknown> {
+  type: "AddStatement";
+  left: LeftType;
+  right: RightType;
+}
+
+export interface SubtractStatement<LeftType = unknown, RightType = unknown> {
+  type: "SubtractStatement";
+  left: LeftType;
+  right: RightType;
+}
+
+type ASTNode = InferStatement | AddStatement | SubtractStatement;
 
 interface AST {
   type: "Program";
@@ -27,27 +81,44 @@ const matchers = {
       const identifier = tokens[idx + 1];
       const equalsign = tokens[idx + 2];
       const value = tokens[idx + 3];
+
       if (identifier.type !== "Identifier") {
         throw new Error(`Unexpected token: ${identifier.val}`);
       }
-      if (equalsign.type !== "Equalsign") {
+      if (equalsign.type !== "EqualSign") {
         throw new Error(`Unexpected token: ${equalsign.val}`);
       }
       const allowedValueTypes = ["Number", "String"];
       if (!allowedValueTypes.includes(value.type)) {
         throw new Error(`Unexpected token: ${value.val}`);
       }
+
+      const isNextANode = innerParse(tokens, idx + 3);
+
       return {
         node: {
           type: "InferStatement",
-          identifier: identifier.val,
-          value: value.val,
+          identifier: identifier,
+          value: isNextANode?.node ?? value,
         },
-        changeIndexBy: 4,
+        changeIndexBy: 4 + (isNextANode ? isNextANode.changeIndexBy : 0),
       } as const;
     },
   },
+  AddStatement: getOperandType("AddStatement", "PlusSign"),
+  SubtractStatement: getOperandType("SubtractStatement", "MinusSign"),
 };
+
+function innerParse(
+  tokens: Token[],
+  idx: number,
+): { node: ASTNode; changeIndexBy: number } | undefined {
+  for (const matcher of Object.values(matchers)) {
+    if (matcher.identify(tokens, idx)) {
+      return matcher.parse(tokens, idx);
+    }
+  }
+}
 
 export function parse(tokens: Token[]): AST {
   const ast = {
@@ -55,17 +126,22 @@ export function parse(tokens: Token[]): AST {
     body: [] as ASTNode[],
   } satisfies AST;
 
-  for (let i = 0; i < tokens.length; ) {
-    const token = tokens[i];
+  let i = 0;
+  while (true) {
     for (const matcher of Object.values(matchers)) {
+      if (i >= tokens.length) {
+        break;
+      }
       if (matcher.identify(tokens, i)) {
         const { node, changeIndexBy } = matcher.parse(tokens, i);
         ast.body.push(node);
         i += changeIndexBy;
         continue;
       }
+      const token = tokens[i];
       throw new Error(`Unexpected token: ${token.val}`);
     }
+    break;
   }
 
   return ast;
