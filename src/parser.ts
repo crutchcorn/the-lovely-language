@@ -128,7 +128,8 @@ export function parse(tokens: Token[]): AST {
 
   let i = 0;
   while (true) {
-    for (const matcher of Object.values(matchers)) {
+    let matched = false;
+    for (const [_name, matcher] of Object.entries(matchers)) {
       if (i >= tokens.length) {
         break;
       }
@@ -136,12 +137,17 @@ export function parse(tokens: Token[]): AST {
         const { node, changeIndexBy } = matcher.parse(tokens, i);
         ast.body.push(node);
         i += changeIndexBy;
+        matched = true;
         continue;
       }
+    }
+    if (!matched) {
       const token = tokens[i];
       throw new Error(`Unexpected token: ${token.val}`);
     }
-    break;
+    if (i >= tokens.length) {
+      break;
+    }
   }
 
   return ast;
