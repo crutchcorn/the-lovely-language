@@ -12,9 +12,9 @@
   "homepage": "https://crutchcorn.github.io/the-lovely-language/",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx ./index.ts",
-    "debug": "node --inspect-brk --loader tsx ./index.ts",
-    "watch": "tsx watch ./index.ts",
+    "dev": "tsx ./src/index.ts",
+    "debug": "node --inspect-brk --loader tsx ./src/index.ts",
+    "watch": "tsx watch ./src/index.ts",
     "test": "vitest",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix",
